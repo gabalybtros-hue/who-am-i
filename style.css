@@ -20,30 +20,39 @@ body {
     margin-bottom: 20px;
 }
 
-/* شبكة اللعب */
+/* حاوي شبكة المربعات */
 .board {
-    display: grid;
-    grid-template-rows: repeat(6, 1fr);
-    gap: 5px;
-    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* توسيط جميع الصفوف عمودياً وأفقياً */
+    justify-content: center;
+    gap: 8px; /* المسافة بين الصف والآخر */
+    margin: 20px auto;
 }
 
+/* الصف الواحد */
 .row {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 5px;
+    display: flex;
+    justify-content: center; /* توسيط المربعات داخل الصف أفقياً */
+    align-items: center;
+    gap: 8px; /* المسافة بين المربع والآخر */
+    width: 100%;
 }
 
+/* المربع الواحد */
 .tile {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     border: 2px solid #3a3a3c;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: bold;
+    color: #ffffff;
     text-transform: uppercase;
+    user-select: none;
+    transition: transform 0.15s ease-in-out, background-color 0.15s ease;
 }
 
 /* ألوان التخمين */

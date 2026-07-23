@@ -35,7 +35,6 @@ async function loadTodayCharacter() {
 }
 
 function initGame() {
-    document.getElementById("hint-text").innerText = todayCharacter.hint;
     document.getElementById("board").innerHTML = "";
     currentGuess = "";
     attempts = 0;
