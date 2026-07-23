@@ -3,43 +3,55 @@ let currentGuess = "";
 let attempts = 0;
 const maxAttempts = 6;
 let todayCharacter = null;
+let isGameOver = false;
 
 window.onload = async () => {
+    // 1. عرض نافذة الشرح فقط عند بداية الزيارة الأولى لليوم
+    const today = new Date().toISOString().split('T')[0];
+    if (localStorage.getItem('seenInstructions') !== today) {
+        document.getElementById("instructions-modal").style.display = "flex";
+    }
+
     await loadTodayCharacter();
 };
+
+function closeInstructions() {
+    const today = new Date().toISOString().split('T')[0];
+    localStorage.setItem('seenInstructions', today);
+    document.getElementById("instructions-modal").style.display = "none";
+}
 
 async function loadTodayCharacter() {
     try {
         const response = await fetch('characters.json');
         const charactersData = await response.json();
 
-        // 1. الحصول على تاريخ اليوم بتنسيق YYYY-MM-DD
         const today = new Date().toISOString().split('T')[0];
-
-        // 2. البحث عن الكلمة المخصصة لتاريخ اليوم
         todayCharacter = charactersData.find(item => item.date === today);
 
-        // إذا لم تجد كلمة لهذا اليوم، اختر أول كلمة كاحتياط
         if (!todayCharacter) {
             todayCharacter = charactersData[0];
         }
 
         targetWord = todayCharacter.name;
-        
-        // إعادة ضبط اللعبة للكلمة اليومية
-        initGame();
+        initGame(today);
 
     } catch (error) {
         console.error("خطأ في تحميل ملف البيانات:", error);
     }
 }
 
-function initGame() {
+function initGame(todayDate) {
+    // التأكد التام من إخفاء نافذة القصة والخسارة عند بداية اللعبة
+    document.getElementById("story-modal").style.display = "none";
+    document.getElementById("lose-modal").style.display = "none";
+
     document.getElementById("board").innerHTML = "";
     currentGuess = "";
     attempts = 0;
+    isGameOver = false;
 
-    // بناء شبكة المربعات بناءً على عدد حروف كلمة اليوم
+    // رسم الشبكة
     for (let i = 0; i < maxAttempts; i++) {
         const row = document.createElement("div");
         row.className = "row";
@@ -53,6 +65,12 @@ function initGame() {
     }
 
     setupKeyboard();
+
+    // إذا كان اللاعب قد أنهى محاولات اليوم مسبقاً، نمنعه من اللعب فقط بدون إظهار القصة فوراً
+    const lastPlayedDate = localStorage.getItem('lastPlayedDate');
+    if (lastPlayedDate === todayDate) {
+        isGameOver = true;
+    }
 }
 
 function setupKeyboard() {
@@ -81,6 +99,8 @@ function setupKeyboard() {
 }
 
 function handleKeyPress(key) {
+    if (isGameOver) return;
+
     if (key === "مسح") {
         if (currentGuess.length > 0) {
             currentGuess = currentGuess.slice(0, -1);
@@ -126,20 +146,37 @@ function checkGuess() {
     const totalDelay = targetWord.length * 200 + 300;
 
     setTimeout(() => {
+        const today = new Date().toISOString().split('T')[0];
+
+        // حالة الفوز: تُفتح القصة فقط هنا!
         if (currentGuess === targetWord) {
-            showStory();
+            isGameOver = true;
+            localStorage.setItem('lastPlayedDate', today);
+            localStorage.setItem('lastGameResult', 'win');
+            showStory(); 
         } else {
             attempts++;
             currentGuess = "";
+            // حالة الخسارة: تظهر نافذة الكلمة فقط
             if (attempts === maxAttempts) {
-                alert(`للأسف انتهت محاولات اليوم! الكلمة كانت: ${targetWord}`);
+                isGameOver = true;
+                localStorage.setItem('lastPlayedDate', today);
+                localStorage.setItem('lastGameResult', 'lose');
+                showLoseModal();
             }
         }
     }, totalDelay);
 }
 
+// تُستدعى فقط عند الفوز
 function showStory() {
     document.getElementById("character-name").innerText = todayCharacter.name;
     document.getElementById("character-story").innerText = todayCharacter.story;
     document.getElementById("story-modal").style.display = "flex";
+}
+
+// تُستدعى فقط عند الخسارة
+function showLoseModal() {
+    document.getElementById("correct-word-display").innerText = targetWord;
+    document.getElementById("lose-modal").style.display = "flex";
 }
