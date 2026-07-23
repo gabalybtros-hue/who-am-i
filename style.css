@@ -1,104 +1,116 @@
+/* إعدادات أساسية لضبط الشاشة وإلغاء أي تمرير أو تكبير */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     -webkit-tap-highlight-color: transparent;
+    user-select: none;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    height: 100dvh; /* يستغل ارتفاع شاشة الجوال كاملاً بدقة */
+    background-color: #121213;
+    color: #ffffff;
+    overflow: hidden; /* يمنع التمرير لأعلى وأسفل نهائياً */
+    direction: rtl;
 }
 
 body {
-    background-color: #121213;
-    color: #ffffff;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    min-height: -webkit-fill-available;
-    direction: rtl;
-    overflow: hidden;
 }
 
-html {
-    height: -webkit-fill-available;
-}
-
-/* الحاوي الرئيسي للعبة */
+/* الحاوية الرئيسية للجوال */
 .game-container {
     width: 100%;
-    max-width: 500px; /* يمنع اللعبة من التمدد بشكل مشوه على الكمبيوتر */
-    height: 100vh;
-    height: 100dvh;
+    max-width: 450px;
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 10px;
+    padding: 10px 8px;
+}
+
+/* الهيدر والعنوان */
+header {
+    width: 100%;
+    text-align: center;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #272729;
 }
 
 header h1 {
-    font-size: clamp(1.4rem, 4vw, 2.2rem); /* يتكيف حجم الخط مع الشاشة */
-    font-weight: bold;
+    font-size: 1.5rem;
+    font-weight: 800;
     letter-spacing: 1px;
-    margin-bottom: 10px;
-    text-align: center;
+    color: #f8f9fa;
 }
 
-/* شبكة المربعات وتوسيطها */
+/* شبكة المربعات */
 #board-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-grow: 1;
     width: 100%;
+    flex-grow: 1;
+    margin: 5px 0;
 }
 
 .board {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    align-items: center;
-    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    max-width: 350px;
 }
 
 .row {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     justify-content: center;
     width: 100%;
 }
 
-/* المربع الواحد - أبعاد مرنة حسب الشاشة */
+/* تصميم المربع الحرفي المميز للجوال */
 .tile {
-    width: clamp(38px, 11vw, 55px);
-    height: clamp(38px, 11vw, 55px);
+    flex: 1;
+    aspect-ratio: 1 / 1; /* يضمن مساحات مربعة متناسقة تلقائياً */
+    max-width: 62px;
+    max-height: 62px;
     border: 2px solid #3a3a3c;
+    border-radius: 8px;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: clamp(1.2rem, 3.5vw, 1.8rem);
+    font-size: 1.8rem;
     font-weight: bold;
     color: #ffffff;
-    user-select: none;
-    border-radius: 6px;
-    transition: transform 0.15s ease-in-out, background-color 0.15s ease;
+    background-color: #121213;
+    transition: transform 0.15s ease, background-color 0.2s ease, border-color 0.2s ease;
 }
 
-/* حالة المربعات */
-.tile.correct { background-color: #538d4e; border-color: #538d4e; }
-.tile.present { background-color: #b59f3b; border-color: #b59f3b; }
-.tile.absent { background-color: #3a3a3c; border-color: #3a3a3c; }
+/* حالات المربعات */
+.tile.correct { background-color: #538d4e !important; border-color: #538d4e !important; }
+.tile.present { background-color: #b59f3b !important; border-color: #b59f3b !important; }
+.tile.absent { background-color: #3a3a3c !important; border-color: #3a3a3c !important; }
 
-/* لوحة المفاتيح */
-#keyboard-container { 
+/* لوحة المفاتيح المريحة للّمس */
+#keyboard-container {
     width: 100%;
-    padding-bottom: 10px;
+    padding-bottom: 5px;
 }
 
 .keyboard-row {
     display: flex;
     justify-content: center;
-    gap: 5px;
+    gap: 4px;
     margin-bottom: 6px;
+    width: 100%;
     touch-action: manipulation;
 }
 
@@ -106,100 +118,101 @@ header h1 {
     background-color: #818384;
     color: #ffffff;
     border: 0;
-    border-radius: 4px;
-    height: clamp(42px, 8vh, 58px);
+    border-radius: 6px;
+    height: 52px;
     flex: 1;
-    font-size: clamp(0.85rem, 2.5vw, 1.1rem);
+    font-size: 1.1rem;
     font-weight: bold;
     cursor: pointer;
-    user-select: none;
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: background-color 0.1s ease, transform 0.05s ease;
 }
 
-.key.wide { flex: 1.5; font-size: clamp(0.75rem, 2vw, 0.95rem); }
-.key:active { background-color: #6a6b6c; }
+.key.wide {
+    flex: 1.5;
+    font-size: 0.9rem;
+}
 
-/* 🌟 تنسيق النوافذ المنبثقة (Modals) */
+.key:active {
+    background-color: #565758;
+    transform: scale(0.96);
+}
+
+/* النوافذ المنبثقة (Modals) متناسقة مع الجوال */
 .modal {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.85);
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.88);
+    backdrop-filter: blur(4px);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
-    padding: 15px;
+    z-index: 9999;
+    padding: 16px;
 }
 
 .modal-content {
     background-color: #1e1e1e;
     border: 1px solid #3a3a3c;
-    border-radius: 12px;
+    border-radius: 16px;
     padding: 20px;
     width: 100%;
-    max-width: 420px;
+    max-width: 380px;
     text-align: center;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
 }
 
 .modal-content h2 {
-    margin-bottom: 12px;
+    font-size: 1.3rem;
+    margin-bottom: 10px;
     color: #ffffff;
 }
 
 .rules-list {
     text-align: right;
-    margin: 15px 0;
-    line-height: 2;
-    background: #2a2a2c;
-    padding: 12px;
-    border-radius: 8px;
-    font-size: 0.95rem;
+    margin: 12px 0;
+    line-height: 1.8;
+    background: #28282a;
+    padding: 12px 15px;
+    border-radius: 10px;
+    font-size: 0.9rem;
 }
 
 .story-text {
     text-align: right;
-    line-height: 1.7;
-    margin: 15px 0;
-    color: #d7dedc;
-    max-height: 220px;
+    line-height: 1.6;
+    margin: 12px 0;
+    color: #e1e1e1;
+    max-height: 180px;
     overflow-y: auto;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
 }
 
 .highlight-word {
     color: #e74c3c;
-    font-size: 2.2rem;
-    margin: 15px 0;
+    font-size: 2rem;
+    margin: 10px 0;
+    font-weight: bold;
 }
 
 .btn {
     background-color: #538d4e;
     color: white;
     border: none;
-    padding: 12px 24px;
+    padding: 14px;
     font-size: 1rem;
     font-weight: bold;
-    border-radius: 6px;
+    border-radius: 10px;
     cursor: pointer;
     margin-top: 10px;
     width: 100%;
 }
-.btn:hover { background-color: #467742; }
 
-/* 💻 تحسين العرض لشاشات الكمبيوتر والشاشات الكبيرة */
-@media (min-width: 768px) {
-    .game-container {
-        padding: 30px 20px;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
-        border-radius: 12px;
-        background-color: #151516;
-        height: auto;
-        min-height: 650px;
-    }
+.btn:active {
+    background-color: #43723f;
 }
