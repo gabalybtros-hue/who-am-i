@@ -1,112 +1,139 @@
+/* RESET & BASE STYLES */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
     -webkit-tap-highlight-color: transparent;
     user-select: none;
 }
 
-body {
+html, body {
+    width: 100%;
+    height: 100%;
+    height: 100dvh;
     background-color: #121213;
     color: #ffffff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+    overflow: hidden; /* إلغاء التمرير كاملاً مثل Woardle */
     direction: rtl;
 }
 
-/* حاوية اللعبة */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* CONTAINER (نفس أبعاد العرض الخاصة بـ Woardle) */
 .game-container {
     width: 100%;
-    max-width: 420px;
-    height: 100vh;
+    max-width: 500px; /* العرض الأقصى القياسي */
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 10px;
+    padding: 0 8px 10px 8px;
 }
 
+/* HEADER */
 header {
     width: 100%;
-    text-align: center;
-    padding-bottom: 10px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid #3a3a3c;
+    margin-bottom: 8px;
 }
 
 header h1 {
     font-size: 1.8rem;
-    font-weight: bold;
-    color: #ffffff;
+    font-weight: 700;
+    letter-spacing: 0.05em;
 }
 
-/* شبكة المربعات (تم حل مشكلة الانكماش هنا) */
+/* BOARD CONTAINER */
 #board-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
     flex-grow: 1;
+    width: 100%;
 }
 
 #board {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+    display: grid;
+    grid-template-rows: repeat(6, 1fr);
+    grid-gap: 5px;
+    padding: 10px;
+    box-sizing: border-box;
 }
 
 .row {
-    display: flex;
-    gap: 6px;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 5px;
 }
 
-/* تحديد حجم المربع بدقة وضمان عدم انكماشه */
+/* TILES (أبعاد المربعات المطابقة) */
 .tile {
     width: 52px;
     height: 52px;
     border: 2px solid #3a3a3c;
-    border-radius: 6px;
-    display: flex;
+    display: inline-flex;
     justify-content: center;
     align-items: center;
     font-size: 1.8rem;
     font-weight: bold;
     color: #ffffff;
-    background-color: #121213;
-    flex-shrink: 0; /* يمنع انكماش المربعات نهائياً! */
+    text-transform: uppercase;
+    border-radius: 4px;
+    background-color: transparent;
+    transition: transform 0.15s ease-in-out;
 }
 
-/* ألوان الحالات */
-.tile.correct { background-color: #538d4e !important; border-color: #538d4e !important; }
-.tile.present { background-color: #b59f3b !important; border-color: #b59f3b !important; }
-.tile.absent { background-color: #3a3a3c !important; border-color: #3a3a3c !important; }
+/* ألوان حالات الحروف في Woardle */
+.tile.correct {
+    background-color: #538d4e !important;
+    border-color: #538d4e !important;
+}
 
-/* لوحة المفاتيح الجذابة والمريحة للأصابع */
+.tile.present {
+    background-color: #b59f3b !important;
+    border-color: #b59f3b !important;
+}
+
+.tile.absent {
+    background-color: #3a3a3c !important;
+    border-color: #3a3a3c !important;
+}
+
+/* KEYBOARD (لوحة المفاتيح) */
 #keyboard-container {
     width: 100%;
-    padding-bottom: 10px;
+    max-width: 500px;
 }
 
 .keyboard-row {
     display: flex;
-    justify-content: center;
-    gap: 4px;
-    margin-bottom: 6px;
     width: 100%;
+    margin: 0 auto 6px auto;
+    touch-action: manipulation;
+    gap: 4px;
 }
 
 .key {
-    background-color: #818384;
-    color: #ffffff;
-    border: 0;
-    border-radius: 4px;
-    height: 55px;
-    flex: 1;
     font-size: 1.1rem;
     font-weight: bold;
+    border: 0;
+    padding: 0;
+    height: 58px;
+    border-radius: 4px;
     cursor: pointer;
+    background-color: #818384;
+    color: #ffffff;
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -114,80 +141,32 @@ header h1 {
 
 .key.wide {
     flex: 1.5;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
 }
 
 .key:active {
-    background-color: #565758;
+    background-color: #6a6b6c;
 }
 
-/* النوافذ المنبثقة */
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.88);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    padding: 15px;
+/* RESPONSIVE MEDIA QUERIES (التكيف الذكي للأجهزة الصغرى) */
+@media (max-height: 680px) {
+    .tile {
+        width: 44px;
+        height: 44px;
+        font-size: 1.5rem;
+    }
+    .key {
+        height: 50px;
+    }
 }
 
-.modal-content {
-    background-color: #1e1e1e;
-    border: 1px solid #3a3a3c;
-    border-radius: 12px;
-    padding: 20px;
-    width: 100%;
-    max-width: 380px;
-    text-align: center;
-}
-
-.modal-content h2 { margin-bottom: 10px; }
-
-.rules-list {
-    text-align: right;
-    margin: 12px 0;
-    line-height: 1.8;
-    background: #28282a;
-    padding: 12px;
-    border-radius: 8px;
-    font-size: 0.95rem;
-}
-
-.story-text {
-    text-align: right;
-    line-height: 1.6;
-    margin: 12px 0;
-    color: #e1e1e1;
-    max-height: 200px;
-    overflow-y: auto;
-}
-
-.highlight-word {
-    color: #e74c3c;
-    font-size: 2rem;
-    margin: 10px 0;
-}
-
-.btn {
-    background-color: #538d4e;
-    color: white;
-    border: none;
-    padding: 12px;
-    font-size: 1rem;
-    font-weight: bold;
-    border-radius: 6px;
-    cursor: pointer;
-    margin-top: 10px;
-    width: 100%;
-}
-
-/* تحسين إضافي للهواتف ذات الشاشات الصغيرة جداً */
 @media (max-width: 360px) {
-    .tile { width: 44px; height: 44px; font-size: 1.5rem; }
-    .key { height: 48px; font-size: 0.95rem; }
+    .tile {
+        width: 40px;
+        height: 40px;
+        font-size: 1.3rem;
+    }
+    .key {
+        font-size: 0.95rem;
+    }
 }
