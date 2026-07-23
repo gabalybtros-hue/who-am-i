@@ -1,59 +1,40 @@
-/* RESET & BASE STYLES */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
-    -webkit-tap-highlight-color: transparent;
-    user-select: none;
-}
-
-html, body {
-    width: 100%;
-    height: 100%;
-    height: 100dvh;
-    background-color: #121213;
-    color: #ffffff;
-    overflow: hidden; /* إلغاء التمرير كاملاً مثل Woardle */
-    direction: rtl;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
+    background-color: #121213;
+    color: #ffffff;
     display: flex;
     justify-content: center;
     align-items: center;
+    min-height: 100vh;
+    direction: rtl;
 }
 
-/* CONTAINER (نفس أبعاد العرض الخاصة بـ Woardle) */
 .game-container {
     width: 100%;
-    max-width: 500px; /* العرض الأقصى القياسي */
-    height: 100%;
+    max-width: 500px;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    padding: 0 8px 10px 8px;
-}
-
-/* HEADER */
-header {
-    width: 100%;
-    height: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-bottom: 1px solid #3a3a3c;
-    margin-bottom: 8px;
+    padding: 15px 10px;
 }
 
 header h1 {
-    font-size: 1.8rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
+    font-size: 2rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    text-align: center;
 }
 
-/* BOARD CONTAINER */
+/* شبكة اللعب */
 #board-container {
     display: flex;
     justify-content: center;
@@ -62,111 +43,127 @@ header h1 {
     width: 100%;
 }
 
-#board {
-    display: grid;
-    grid-template-rows: repeat(6, 1fr);
-    grid-gap: 5px;
-    padding: 10px;
-    box-sizing: border-box;
+.board {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
 }
 
 .row {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-gap: 5px;
+    display: flex;
+    gap: 6px;
+    justify-content: center;
 }
 
-/* TILES (أبعاد المربعات المطابقة) */
 .tile {
     width: 52px;
     height: 52px;
     border: 2px solid #3a3a3c;
-    display: inline-flex;
+    display: flex;
     justify-content: center;
     align-items: center;
     font-size: 1.8rem;
     font-weight: bold;
     color: #ffffff;
-    text-transform: uppercase;
+    user-select: none;
     border-radius: 4px;
-    background-color: transparent;
-    transition: transform 0.15s ease-in-out;
 }
 
-/* ألوان حالات الحروف في Woardle */
-.tile.correct {
-    background-color: #538d4e !important;
-    border-color: #538d4e !important;
-}
+/* حالة المربعات */
+.tile.correct { background-color: #538d4e; border-color: #538d4e; }
+.tile.present { background-color: #b59f3b; border-color: #b59f3b; }
+.tile.absent { background-color: #3a3a3c; border-color: #3a3a3c; }
 
-.tile.present {
-    background-color: #b59f3b !important;
-    border-color: #b59f3b !important;
-}
-
-.tile.absent {
-    background-color: #3a3a3c !important;
-    border-color: #3a3a3c !important;
-}
-
-/* KEYBOARD (لوحة المفاتيح) */
-#keyboard-container {
-    width: 100%;
-    max-width: 500px;
-}
-
+/* لوحة المفاتيح */
+#keyboard-container { width: 100%; }
 .keyboard-row {
     display: flex;
-    width: 100%;
-    margin: 0 auto 6px auto;
-    touch-action: manipulation;
+    justify-content: center;
     gap: 4px;
+    margin-bottom: 6px;
 }
 
 .key {
-    font-size: 1.1rem;
-    font-weight: bold;
-    border: 0;
-    padding: 0;
-    height: 58px;
-    border-radius: 4px;
-    cursor: pointer;
     background-color: #818384;
     color: #ffffff;
+    border: 0;
+    border-radius: 4px;
+    height: 55px;
     flex: 1;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+}
+
+.key.wide { flex: 1.5; font-size: 0.9rem; }
+
+/* 🌟 تنسيق النوافذ المنبثقة (Modals) */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 1000;
+    padding: 15px;
 }
 
-.key.wide {
-    flex: 1.5;
-    font-size: 0.85rem;
+.modal-content {
+    background-color: #1e1e1e;
+    border: 1px solid #3a3a3c;
+    border-radius: 12px;
+    padding: 25px;
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
 }
 
-.key:active {
-    background-color: #6a6b6c;
+.modal-content h2 {
+    margin-bottom: 12px;
+    color: #ffffff;
 }
 
-/* RESPONSIVE MEDIA QUERIES (التكيف الذكي للأجهزة الصغرى) */
-@media (max-height: 680px) {
-    .tile {
-        width: 44px;
-        height: 44px;
-        font-size: 1.5rem;
-    }
-    .key {
-        height: 50px;
-    }
+.rules-list {
+    text-align: right;
+    margin: 15px 0;
+    line-height: 2;
+    background: #2a2a2c;
+    padding: 12px;
+    border-radius: 8px;
 }
 
-@media (max-width: 360px) {
-    .tile {
-        width: 40px;
-        height: 40px;
-        font-size: 1.3rem;
-    }
-    .key {
-        font-size: 0.95rem;
-    }
+.story-text {
+    text-align: right;
+    line-height: 1.7;
+    margin: 15px 0;
+    color: #d7dedc;
+    max-height: 250px;
+    overflow-y: auto;
 }
+
+.highlight-word {
+    color: #e74c3c;
+    font-size: 2.5rem;
+    margin: 15px 0;
+}
+
+.btn {
+    background-color: #538d4e;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 100%;
+}
+.btn:hover { background-color: #467742; }
