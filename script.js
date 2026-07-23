@@ -6,7 +6,6 @@ let todayCharacter = null;
 let isGameOver = false;
 
 window.onload = async () => {
-    // 1. عرض نافذة الشرح فقط عند بداية الزيارة الأولى لليوم
     const today = new Date().toISOString().split('T')[0];
     if (localStorage.getItem('seenInstructions') !== today) {
         document.getElementById("instructions-modal").style.display = "flex";
@@ -42,7 +41,6 @@ async function loadTodayCharacter() {
 }
 
 function initGame(todayDate) {
-    // التأكد التام من إخفاء نافذة القصة والخسارة عند بداية اللعبة
     document.getElementById("story-modal").style.display = "none";
     document.getElementById("lose-modal").style.display = "none";
 
@@ -51,7 +49,6 @@ function initGame(todayDate) {
     attempts = 0;
     isGameOver = false;
 
-    // رسم الشبكة
     for (let i = 0; i < maxAttempts; i++) {
         const row = document.createElement("div");
         row.className = "row";
@@ -66,7 +63,6 @@ function initGame(todayDate) {
 
     setupKeyboard();
 
-    // إذا كان اللاعب قد أنهى محاولات اليوم مسبقاً، نمنعه من اللعب فقط بدون إظهار القصة فوراً
     const lastPlayedDate = localStorage.getItem('lastPlayedDate');
     if (lastPlayedDate === todayDate) {
         isGameOver = true;
@@ -148,7 +144,6 @@ function checkGuess() {
     setTimeout(() => {
         const today = new Date().toISOString().split('T')[0];
 
-        // حالة الفوز: تُفتح القصة فقط هنا!
         if (currentGuess === targetWord) {
             isGameOver = true;
             localStorage.setItem('lastPlayedDate', today);
@@ -157,7 +152,6 @@ function checkGuess() {
         } else {
             attempts++;
             currentGuess = "";
-            // حالة الخسارة: تظهر نافذة الكلمة فقط
             if (attempts === maxAttempts) {
                 isGameOver = true;
                 localStorage.setItem('lastPlayedDate', today);
@@ -168,14 +162,12 @@ function checkGuess() {
     }, totalDelay);
 }
 
-// تُستدعى فقط عند الفوز
 function showStory() {
     document.getElementById("character-name").innerText = todayCharacter.name;
     document.getElementById("character-story").innerText = todayCharacter.story;
     document.getElementById("story-modal").style.display = "flex";
 }
 
-// تُستدعى فقط عند الخسارة
 function showLoseModal() {
     document.getElementById("correct-word-display").innerText = targetWord;
     document.getElementById("lose-modal").style.display = "flex";
