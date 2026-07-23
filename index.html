@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>خَمِّن الشخصية</title>
+    <link rel="stylesheet" href="style.css?v=2.0">
+</head>
+<body>
+
+    <div class="game-container">
+        <header>
+            <h1>خَمِّن الشخصية</h1>
+        </header>
+
+        <!-- شبكة المربعات -->
+        <main id="board-container">
+            <div id="board"></div>
+        </main>
+
+        <!-- لوحة المفاتيح -->
+        <div id="keyboard-container">
+            <div id="keyboard"></div>
+        </div>
+    </div>
+
+    <!-- 1️⃣ نافذة الشرح (بداية اللعبة) -->
+    <div id="instructions-modal" class="modal">
+        <div class="modal-content">
+            <h2>🎮 كيف تلعب؟</h2>
+            <p>خمّن اسم الشخصية اليومية في 6 محاولات فقط!</p>
+            <div class="rules-list">
+                <p><span class="badge green">🟩 أخضر</span> الحرف صحيح وفي مكانه.</p>
+                <p><span class="badge yellow">🟨 أصفر</span> الحرف موجود لكن بمكان آخر.</p>
+                <p><span class="badge gray">⬛ رمادي</span> الحرف غير موجود في الاسم.</p>
+            </div>
+            <button class="btn" onclick="closeInstructions()">ابدأ اللعب 🚀</button>
+        </div>
+    </div>
+
+    <!-- 2️⃣ نافذة الفوز (القصة) -->
+    <div id="story-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2 id="character-name"></h2>
+            <p id="character-story" class="story-text"></p>
+            <button class="btn" onclick="document.getElementById('story-modal').style.display='none'">إغلاق</button>
+        </div>
+    </div>
+
+    <!-- 3️⃣ نافذة الخسارة (الكلمة فقط) -->
+    <div id="lose-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2>انتهت المحاولات! ⏳</h2>
+            <p>الكلمة الصحيحة لليوم كانت:</p>
+            <h1 id="correct-word-display" class="highlight-word"></h1>
+            <p>حاول مرة أخرى غداً مع شخصية جديدة!</p>
+            <button class="btn" onclick="document.getElementById('lose-modal').style.display='none'">إغلاق</button>
+        </div>
+    </div>
+
+    <script src="script.js?v=2.0"></script>
+</body>
+</html>
